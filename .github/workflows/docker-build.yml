@@ -10,6 +10,7 @@ on:
   
 env:
   USERNAME: "VoidNullable"
+  GH_TOKEN: ${{ github.token }}
   REPO: "lific"
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -38,7 +39,7 @@ jobs:
       - name: Get latest tag
         id: latest_tag
         run: |
-          TAG=$(curl -s https://api.github.com/repos/${{ env.USERNAME }}/${{ env.REPO }}/tags | jq -r '.[0].name')
+          TAG=$(curl -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -s https://api.github.com/repos/${{ env.USERNAME }}/${{ env.REPO }}/tags | jq -r '.[0].name')
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
           echo "LATEST_TAG=${TAG}" >> $GITHUB_ENV
      
